@@ -32,6 +32,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.vacation_project.Login.LoginScreen
+import com.example.vacation_project.Login.NameScreen
 import org.checkerframework.common.subtyping.qual.Bottom
 
 class MainActivity : ComponentActivity() {
@@ -39,8 +41,27 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             VacationprojectTheme {
-                MainScreen()
+                val navController = rememberNavController()
+                SetupNavGraph(navController = navController)
             }
+        }
+    }
+}
+
+@Composable
+fun SetupNavGraph(navController: NavHostController) {
+    NavHost(navController = navController, startDestination = "start_screen") {
+        composable("start_screen") {
+            StartScreen(navController)
+        }
+        composable("login_screen") {
+            LoginScreen(navController)
+        }
+        composable("name_screen") {
+            NameScreen(navController)
+        }
+        composable("main_screen") {
+            MainScreen()
         }
     }
 }
