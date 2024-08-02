@@ -10,4 +10,8 @@
 
     <color name="color_selected">#FFEA7E</color>
     <color name="color_unselected">#000000</color>
+    <color name="sub_color">#DCEAEB</color>
+    <color name="sub_color2">#8AB0B9</color>
+    <color name="main_color">#B5D2D8</color>
+
 </resources>

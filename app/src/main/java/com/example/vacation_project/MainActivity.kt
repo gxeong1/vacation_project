@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
+import androidx.annotation.RequiresPermission
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,13 +15,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.vacation_project.ui.theme.VacationprojectTheme
-import com.example.vacation_project.Screen.CommunityScreen
+import com.example.vacation_project.Screen.Community.CommunityScreen
 import com.example.vacation_project.Screen.ProfileScreen
 import com.example.vacation_project.Screen.RankScreen
 import com.example.vacation_project.Screen.SearchScreen
@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.vacation_project.Login.LoginScreen
 import com.example.vacation_project.Login.NameScreen
-import org.checkerframework.common.subtyping.qual.Bottom
+import com.example.vacation_project.Screen.Community.WriteScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -133,7 +133,7 @@ fun BottomNav(navController: NavHostController) {
 fun NavigationGraph(navController: NavHostController, modifier: Modifier = Modifier) {
     NavHost(navController = navController, startDestination = BottomNavItem.Community.screenRoute, Modifier.fillMaxSize()) {
         composable(BottomNavItem.Community.screenRoute) {
-            CommunityScreen()
+            CommunityScreen(navController)
         }
         composable(BottomNavItem.Search.screenRoute) {
             SearchScreen()
@@ -143,6 +143,9 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier = Modif
         }
         composable(BottomNavItem.Profile.screenRoute) {
             ProfileScreen()
+        }
+        composable(Routes.WriteScreen){
+            WriteScreen(navController = navController)
         }
     }
 }
@@ -164,4 +167,7 @@ object Routes {
     const val SearchScreen = "SearchScreen"
     const val RankScreen = "RankScreen"
     const val ProfileScreen = "ProfileScreen"
+
+    const val WriteScreen = "WriteScreen"
+
 }
