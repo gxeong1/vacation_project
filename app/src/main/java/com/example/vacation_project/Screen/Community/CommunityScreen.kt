@@ -34,7 +34,7 @@ fun CommunityScreen(navController: NavHostController){
         QuestionCard(CardTitle = "제목", Subject = "과목", Content = "내용")
     }
 
-    Box{
+    Box(modifier = Modifier.size(150.dp)){
         ImageButton(
             imageResId = R.drawable.writebutton,
             contentDescription = "writeButton",
@@ -44,7 +44,7 @@ fun CommunityScreen(navController: NavHostController){
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp),
-            size = 60
+            size = 150
         )
     }
 }

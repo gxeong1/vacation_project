@@ -107,8 +107,7 @@ fun WriteScreen(navController: NavHostController) {
 
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -117,7 +116,7 @@ fun WriteScreen(navController: NavHostController) {
             ) {
                 EditableTextField(
                     title = "내용",
-                    size = 400,
+                    size = 430,
                     fontsize = 16,
                     isSingleLine = false
                 )
