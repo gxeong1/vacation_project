@@ -45,7 +45,7 @@ fun PostScreen(navController: NavHostController){
                     .width(7.dp)
             )
             Text(
-                text = "질문 작성",
+                text = "질문",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.W600,
             )
