@@ -1,4 +1,4 @@
-package com.example.vacation_project.Screen.Community
+package com.example.vacation_project.Screen.Community.Post
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -15,14 +15,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.vacation_project.R
+import com.example.vacation_project.Screen.Community.ImageButton
 
 @Composable
 fun PostScreen(navController: NavHostController){
+
+    val lineColor = colorResource(id = R.color.line_color)
+
     Column (modifier = Modifier.background(Color.White)) {
         Spacer(modifier = Modifier.height(14.dp))
         Row(
@@ -51,6 +56,15 @@ fun PostScreen(navController: NavHostController){
             )
         }
 
-        
+        Post(title = "제목", user = "작성자", subject = "과목", text = "내용")
+
+        Spacer(modifier =Modifier.height(15.dp))
+
+        Spacer(modifier = Modifier
+            .height(2.dp)
+            .width(350.dp)
+            .background(lineColor)
+            .align(alignment = Alignment.CenterHorizontally))
+
     }
 }
