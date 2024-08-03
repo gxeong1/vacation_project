@@ -1,6 +1,7 @@
 package com.example.vacation_project.Screen.Community
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -21,7 +22,8 @@ import com.example.vacation_project.R
 fun QuestionCard(
     CardTitle : String,
     Subject : String,
-    Content : String
+    Content : String,
+    onCLick : () -> Unit
 ){
     val backgroundColor = colorResource(id = R.color.sub_color)
     Column(modifier = Modifier
@@ -29,6 +31,7 @@ fun QuestionCard(
         .height(106.dp)
         .background(backgroundColor, RoundedCornerShape(12.dp))
         .padding(top = 16.dp, start = 24.dp, end = 24.dp, bottom = 16.dp)
+        .clickable(onClick = onCLick)
     ) {
         Text(text = CardTitle, fontSize = 18.sp, fontWeight = FontWeight.W600)
         Text(text = Subject, fontSize = 14.sp, fontWeight = FontWeight.W400)

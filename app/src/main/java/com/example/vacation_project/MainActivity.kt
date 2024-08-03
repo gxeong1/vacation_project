@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.vacation_project.Login.LoginScreen
 import com.example.vacation_project.Login.NameScreen
+import com.example.vacation_project.Screen.Community.PostScreen
 import com.example.vacation_project.Screen.Community.WriteScreen
 
 class MainActivity : ComponentActivity() {
@@ -147,6 +148,9 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier = Modif
         composable(Routes.WriteScreen){
             WriteScreen(navController = navController)
         }
+        composable(Routes.PostScreen){
+            PostScreen(navController = navController)
+        }
     }
 }
 
@@ -169,5 +173,6 @@ object Routes {
     const val ProfileScreen = "ProfileScreen"
 
     const val WriteScreen = "WriteScreen"
+    const val PostScreen = "PostScreen"
 
 }

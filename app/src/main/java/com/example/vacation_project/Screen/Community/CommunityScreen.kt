@@ -31,7 +31,12 @@ fun CommunityScreen(navController: NavHostController){
             fontWeight = FontWeight.W600
             )
         Spacer(modifier = Modifier.height(25.dp))
-        QuestionCard(CardTitle = "제목", Subject = "과목", Content = "내용")
+        QuestionCard(CardTitle = "제목",
+            Subject = "과목",
+            Content = "내용",
+            onCLick = {
+                navController.navigate(Routes.PostScreen)
+            })
     }
 
     Box(modifier = Modifier.size(150.dp)){
