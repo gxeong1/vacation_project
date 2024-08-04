@@ -1,3 +1,5 @@
+@file:Suppress("NAME_SHADOWING")
+
 package com.example.vacation_project
 
 import android.os.Bundle
@@ -24,7 +26,9 @@ import com.example.vacation_project.Screen.ProfileScreen
 import com.example.vacation_project.Screen.RankScreen
 import com.example.vacation_project.Screen.SearchScreen
 import androidx.compose.material3.*
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -33,8 +37,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.vacation_project.Login.LoginScreen
 import com.example.vacation_project.Login.NameScreen
+import com.example.vacation_project.Login.SignScreen
 import com.example.vacation_project.Screen.Community.Post.PostScreen
 import com.example.vacation_project.Screen.Community.Write.WriteScreen
+import com.example.vacation_project.ui.theme.AuthState
+import com.example.vacation_project.ui.theme.AuthViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,26 +62,45 @@ fun SetupNavGraph(navController: NavHostController) {
             StartScreen(navController)
         }
         composable("login_screen") {
-            LoginScreen(navController)
+            LoginScreen(navController,authViewModel = AuthViewModel())
         }
         composable("name_screen") {
             NameScreen(navController)
         }
         composable("main_screen") {
-            MainScreen()
+            MainScreen(modifier = Modifier, authViewModel = AuthViewModel(),navController)
+        }
+        composable("sign_screen") {
+            SignScreen(navController, authViewModel = AuthViewModel())
+        }
+        composable("login_screen") {
+            LoginScreen(navController,authViewModel = AuthViewModel())
         }
     }
 }
 
+
 @Composable
-fun MainScreen() {
+fun MainScreen(modifier: Modifier = Modifier,authViewModel: AuthViewModel,navController: NavHostController) {
     val navController = rememberNavController()
+    val authState = authViewModel.authState.observeAsState()
+
+    LaunchedEffect(authState.value) {
+        when(authState.value){
+            is AuthState.Unauthenticated -> navController.navigate("login_screen")
+            else -> Unit
+        }
+    }
     Scaffold(
 
         bottomBar = { BottomNav(navController = navController) }
     ) {
         Box(Modifier.padding(it)){
             NavigationGraph(navController = navController)
+        }
+        TextButton(onClick = { authViewModel.signout() }) {
+            Text(text = "로그앙웃")
+
         }
     }
 }

@@ -14,12 +14,9 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,14 +25,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.vacation_project.ui.theme.AuthViewModel
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import com.example.vacation_project.ui.theme.AuthState
-import com.example.vacation_project.ui.theme.AuthViewModel
 
 @Composable
-fun LoginScreen(navController: NavHostController,authViewModel: AuthViewModel) {
+fun SignScreen(navController : NavHostController,authViewModel: AuthViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val authState = authViewModel.authState.observeAsState()
@@ -49,7 +46,6 @@ fun LoginScreen(navController: NavHostController,authViewModel: AuthViewModel) {
         }
 
     }
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -57,14 +53,7 @@ fun LoginScreen(navController: NavHostController,authViewModel: AuthViewModel) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(
-            modifier = Modifier
-                .size(100.dp, 100.dp)
-                .background(color = Color.LightGray),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(text = "img")
-        }
+        Text(text = "회원가입")
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -83,15 +72,22 @@ fun LoginScreen(navController: NavHostController,authViewModel: AuthViewModel) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(onClick = { authViewModel.login(email, password) },
-            enabled = authState.value != AuthState.Loading) {
+        Button(onClick = {
+            authViewModel.signup(email,password)
+        },enabled = authState.value != AuthState.Loading)
+        {
             Text(text = "확인")
         }
 
-        TextButton(onClick = { navController.navigate("sign_screen") }) {
-            Text(text = "회원가입하러가기")
+        TextButton(onClick = { navController.navigate("login_screen") }) {
+            Text(text = "로그인하러돌아가기")
         }
     }
 }
 
-
+@Preview(showBackground = true)
+@Composable
+fun PreviewSignScreen() {
+    val navController = rememberNavController()
+    SignScreen(navController = navController, authViewModel = AuthViewModel())
+}
