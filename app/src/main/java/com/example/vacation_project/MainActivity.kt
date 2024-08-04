@@ -173,5 +173,7 @@ object Routes {
 
     const val WriteScreen = "WriteScreen"
     const val PostScreen = "PostScreen"
+    
+    const val FilterScreen = "FilterScreen"
 
 }
