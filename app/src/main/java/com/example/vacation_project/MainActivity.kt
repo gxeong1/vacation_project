@@ -35,6 +35,7 @@ import com.example.vacation_project.Login.LoginScreen
 import com.example.vacation_project.Login.NameScreen
 import com.example.vacation_project.Screen.Community.Post.PostScreen
 import com.example.vacation_project.Screen.Community.Write.WriteScreen
+import com.example.vacation_project.ui.theme.AuthViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +56,7 @@ fun SetupNavGraph(navController: NavHostController) {
             StartScreen(navController)
         }
         composable("login_screen") {
-            LoginScreen(navController)
+            LoginScreen(navController, authViewModel = AuthViewModel())
         }
         composable("name_screen") {
             NameScreen(navController)
