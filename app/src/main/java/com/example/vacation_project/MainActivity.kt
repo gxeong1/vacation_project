@@ -22,7 +22,6 @@ import com.example.vacation_project.ui.theme.VacationprojectTheme
 import com.example.vacation_project.Screen.Community.CommunityScreen
 import com.example.vacation_project.Screen.ProfileScreen
 import com.example.vacation_project.Screen.RankScreen
-import com.example.vacation_project.Screen.SearchScreen
 import androidx.compose.material3.*
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.colorResource
@@ -33,8 +32,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.vacation_project.Login.LoginScreen
 import com.example.vacation_project.Login.NameScreen
+import com.example.vacation_project.Routes.SearchScreen
 import com.example.vacation_project.Screen.Community.Post.PostScreen
 import com.example.vacation_project.Screen.Community.Write.WriteScreen
+import com.example.vacation_project.Screen.Search.FilterScreen
+import com.example.vacation_project.Screen.Search.SearchScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -136,7 +138,7 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier = Modif
             CommunityScreen(navController)
         }
         composable(BottomNavItem.Search.screenRoute) {
-            SearchScreen()
+            SearchScreen(navController = navController)
         }
         composable(BottomNavItem.Rank.screenRoute) {
             RankScreen()
