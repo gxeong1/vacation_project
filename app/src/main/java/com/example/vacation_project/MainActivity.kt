@@ -150,6 +150,9 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier = Modif
         composable(Routes.PostScreen){
             PostScreen(navController = navController)
         }
+        composable(Routes.FilterScreen){
+            FilterScreen(navController = navController)
+        }
     }
 }
 
