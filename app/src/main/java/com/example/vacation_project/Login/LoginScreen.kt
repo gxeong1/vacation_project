@@ -31,6 +31,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import com.example.vacation_project.Routes
 import com.example.vacation_project.ui.theme.AuthState
 import com.example.vacation_project.ui.theme.AuthViewModel
 

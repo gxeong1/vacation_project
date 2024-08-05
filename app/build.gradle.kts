@@ -53,7 +53,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -72,20 +71,17 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    //firebase
+    // firebase
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     implementation("com.google.firebase:firebase-analytics")
 
-    //navigation
+    // navigation
     val nav_version = "2.7.7"
-
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
-    implementation ("androidx.compose.material3:material3:1.1.0")
-    implementation ("androidx.navigation:navigation-compose:2.6.0-alpha04") // 네비게이션 컴포저 사용
-
-
-
+    // compose material3
+    implementation("androidx.compose.material3:material3:1.1.0")
+    implementation("androidx.navigation:navigation-compose:2.6.0-alpha04")
 }
