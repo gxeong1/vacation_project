@@ -82,8 +82,7 @@ fun PostScreen(navController: NavHostController){
         ) {
             Row(
                 modifier = Modifier
-                    .width(345.dp)
-                    .height(50.dp)
+                    .size(345.dp, 50.dp)
                     .background(btnColor, shape = RoundedCornerShape(100.dp))
                     .align(Alignment.BottomCenter)
             ) {
