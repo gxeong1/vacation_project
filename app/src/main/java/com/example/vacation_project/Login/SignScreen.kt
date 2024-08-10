@@ -37,15 +37,15 @@ fun SignScreen(navController : NavHostController,authViewModel: AuthViewModel) {
     var password by remember { mutableStateOf("") }
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
-    LaunchedEffect(authState.value) {
-        when(authState.value){
-            is AuthState.Authenticated -> navController.navigate("name_screen")
-            is AuthState.Error -> Toast.makeText(context,
-                (authState.value as AuthState.Error).message,Toast.LENGTH_SHORT).show()
-            else -> Unit
-        }
-
-    }
+//    LaunchedEffect(authState.value) {
+//        when(authState.value){
+//            is AuthState.Authenticated -> navController.navigate("name_screen")
+//            is AuthState.Error -> Toast.makeText(context,
+//                (authState.value as AuthState.Error).message,Toast.LENGTH_SHORT).show()
+//            else -> Unit
+//        }
+//
+//    }
     Column(
         modifier = Modifier
             .fillMaxSize()

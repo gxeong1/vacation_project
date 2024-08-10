@@ -42,15 +42,15 @@ fun LoginScreen(navController: NavHostController,authViewModel: AuthViewModel) {
     var password by remember { mutableStateOf("") }
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
-    LaunchedEffect(authState.value) {
-        when(authState.value){
-            is AuthState.Authenticated -> navController.navigate("name_screen")
-            is AuthState.Error -> Toast.makeText(context,
-                (authState.value as AuthState.Error).message,Toast.LENGTH_SHORT).show()
-            else -> Unit
-        }
-
-    }
+//    LaunchedEffect(authState.value) {
+//        when(authState.value){
+//            is AuthState.Authenticated -> navController.navigate("name_screen")
+//            is AuthState.Error -> Toast.makeText(context,
+//                (authState.value as AuthState.Error).message,Toast.LENGTH_SHORT).show()
+//            else -> Unit
+//        }
+//
+//    }이거 있으면 로그인페이지가 안나오네 왜지 없엠 일단
 
     Column(
         modifier = Modifier
