@@ -50,7 +50,7 @@ fun LoginScreen(navController: NavHostController,authViewModel: AuthViewModel) {
 //            else -> Unit
 //        }
 //
-//    }이거 있으면 로그인페이지가 안나오네 왜지 없엠 일단
+//    }dlr
 
     Column(
         modifier = Modifier
