@@ -23,6 +23,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.vacation_project.BottomNavItem
 import com.example.vacation_project.R
 import com.example.vacation_project.Routes
 
@@ -35,8 +36,7 @@ fun SearchScreen(navController: NavHostController){
             fontSize = 16.sp,
             fontWeight = FontWeight.W600
         )
-        com.example.vacation_project.Screen.SearchBar()
-        //이거 왜 그러는 지 모르겠음. 지금 실행 될 수 있게 오류만 수정해놨음.동화 보면 수정해주세요
+        SearchBar()
         Search_menu(navController)
     }
 }

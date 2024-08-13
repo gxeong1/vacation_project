@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun SetupNavGraph(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = "start_screen") {
+    NavHost(navController = navController, startDestination = "main_screen") {
         composable("start_screen") {
             StartScreen(navController)
         }
