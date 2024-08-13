@@ -35,7 +35,7 @@ fun SearchScreen(navController: NavHostController){
             fontSize = 16.sp,
             fontWeight = FontWeight.W600
         )
-        com.example.vacation_project.Screen.SearchBar()
+        SearchBar()
         //이거 왜 그러는 지 모르겠음. 지금 실행 될 수 있게 오류만 수정해놨음.동화 보면 수정해주세요
         Search_menu(navController)
     }
