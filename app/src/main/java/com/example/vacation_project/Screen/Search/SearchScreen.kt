@@ -36,7 +36,7 @@ fun SearchScreen(navController: NavHostController){
             fontWeight = FontWeight.W600
         )
         SearchBar()
-        //이거 왜 그러는 지 모르겠음. 지금 실행 될 수 있게 오류만 수정해놨음.동화 보면 수정해주세요
+        //이거 왜 그러는 지 모르겠음. 지금 실행 될 수 있게 오류만 수정해놨음.동화 보면 수정해주세요 - 수정완료
         Search_menu(navController)
     }
 }
