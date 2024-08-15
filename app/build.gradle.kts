@@ -1,8 +1,8 @@
 plugins {
+    alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
 
-    //firebase
-    id("com.android.application")
+    // Firebase
     id("com.google.gms.google-services")
 }
 
@@ -71,17 +71,18 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // firebase
+    // Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
 
-    // navigation
+    // Navigation
     val nav_version = "2.7.7"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
-    // compose material3
+    // Compose Material3
     implementation("androidx.compose.material3:material3:1.1.0")
-    implementation("androidx.navigation:navigation-compose:2.6.0-alpha04")
 }

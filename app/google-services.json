@@ -12,7 +12,12 @@
           "package_name": "com.example.vacation_project"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "214858816000-k1422os4s88lot19opjsaf6is1j0o7f3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBXhvK0iZyehJ0HelbPGytEfSUuoAaU4oM"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "214858816000-k1422os4s88lot19opjsaf6is1j0o7f3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

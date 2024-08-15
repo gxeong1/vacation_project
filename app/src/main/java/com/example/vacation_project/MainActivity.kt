@@ -32,12 +32,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.vacation_project.Login.LoginScreen
 import com.example.vacation_project.Login.NameScreen
-import com.example.vacation_project.Login.SignScreen
 import com.example.vacation_project.Screen.Community.Post.PostScreen
 import com.example.vacation_project.Screen.Community.Write.WriteScreen
 import com.example.vacation_project.Screen.Search.FilterScreen
 import com.example.vacation_project.Screen.Search.SearchScreen
-import com.example.vacation_project.ui.theme.AuthViewModel
 import java.util.logging.Filter
 
 class MainActivity : ComponentActivity() {
@@ -59,10 +57,7 @@ fun SetupNavGraph(navController: NavHostController) {
             StartScreen(navController)
         }
         composable("login_screen") {
-            LoginScreen(navController, authViewModel = AuthViewModel())
-        }
-        composable("sign_screen"){
-            SignScreen(navController, authViewModel = AuthViewModel())
+            LoginScreen { }
         }
         composable("name_screen") {
             NameScreen(navController)
