@@ -1,6 +1,12 @@
 package com.example.vacation_project.Login
 
+import android.content.Intent
+import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.scrollable
@@ -11,10 +17,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -39,73 +49,129 @@ import androidx.navigation.compose.rememberNavController
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.em
 import com.example.vacation_project.R
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.Firebase
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.auth
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import java.lang.Error
+
+
 
 @Composable
-fun Greeting(text: String) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.bodyMedium,
-        color = Color.Gray,
-        modifier = Modifier.padding(bottom = 12.dp)
-    )
-}
+fun LoginScreen(){
+    var user by remember { mutableStateOf(Firebase.auth.currentUser) }
+    val token = stringResource(id = R.string.client_id)
+    val context = LocalContext.current
+    val launcher = rememberFirebaseAuthLaunchar(onAuthComplete = { result ->
+        user = result.user },
+        onAuthError = {
+            user = null
+        }
+        )
 
-@Composable
-fun LoginScreen(content: () -> Unit) {
-    Surface(color = Color.White) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize() // 전체 화면 너비만큼 채우기
-                .padding(start = 15.dp, end = 15.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally // 수평 가운데 정렬
-        ) {
-            Greeting(text = "시작하시겠습니까?")
-            Spacer(modifier = Modifier.size(20.dp)) // Greeting과 버튼 사이에 공간 추가
-            SignGoogleButton {
-                content()
+    Column (modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally){
+        if(user == null){
+            Spacer(modifier = Modifier.height(35.dp))
+            ElevatedButton(onClick = {
+                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(token)
+                    .requestEmail()
+                    .build()
+
+                val googleSignInClient = GoogleSignIn.getClient(context,gso)
+                launcher.launch(googleSignInClient.signInIntent)
+
+
+            },
+                shape = RoundedCornerShape(35.dp),
+                modifier = Modifier
+                    .height(50.dp)
+                    .fillMaxWidth()
+                    .padding(5.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                    contentColor = Color.Black)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.loginimg),
+                    contentDescription = "Google sign button",
+                    tint = Color.Unspecified,
+                    modifier = Modifier.size(35.dp)
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Text(text = "회원가입",
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize =  15.sp,
+                    letterSpacing = 0.1.em
+                )
+            }
+        }else{
+            Text(text = "Hi, ${user!!.displayName}!",
+                fontFamily = FontFamily.SansSerif,
+                fontWeight = FontWeight.ExtraBold,
+                fontSize =  14.sp,
+                color = Color.White
+            )
+            Spacer(modifier = Modifier.height(35.dp))
+
+            Button(onClick = {
+                Firebase.auth.signOut()
+                user = null
+            },
+                shape = RoundedCornerShape(15.dp),
+                modifier = Modifier
+                    .height(50.dp)
+                    .fillMaxWidth()
+                    .padding(5.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                    contentColor = Color.Black)
+            ) {
+                Text(text = "Log Out",
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize =  15.sp,
+                    letterSpacing = 0.1.em    )
             }
         }
     }
 }
-
 @Composable
-fun SignGoogleButton(onClick: () -> Unit) {
-    Surface(
-        modifier = Modifier
-            .clickable(onClick = onClick)
-            .fillMaxWidth(), // 너비만 채우기
-        color = MaterialTheme.colorScheme.surface,
-        shape = MaterialTheme.shapes.small,
-        shadowElevation = 10.dp,
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start,
-            modifier = Modifier.padding(
-                start = 14.dp,
-                end = 12.dp,
-                top = 11.dp,
-                bottom = 11.dp
-            )
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.loginimg),
-                contentDescription = "Google sign button",
-                tint = Color.Unspecified,
-                modifier = Modifier.size(35.dp)
-            )
-            Spacer(modifier = Modifier.width(20.dp))
-            Text(
-                text = "Sign in with Google",
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                color = Color.Gray,
-            )
+fun rememberFirebaseAuthLaunchar(
+    onAuthComplete: (AuthResult) -> Unit,
+    onAuthError: (ApiException) -> Unit
+): ManagedActivityResultLauncher<Intent,ActivityResult>{
+    val scope = rememberCoroutineScope()
+
+    return rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)//result->it
+        try{
+            val account = task.getResult(ApiException::class.java)!!
+            Log.d("GoogleAuth","account $account")
+            val credential = GoogleAuthProvider.getCredential(account.idToken!!,null)
+            scope.launch {
+                val authResult = Firebase.auth.signInWithCredential(credential).await()
+                onAuthComplete(authResult)
+            }
+        }catch (e: ApiException){
+            Log.d("GoogleAuth", e.toString())
+            onAuthError(e)
         }
     }
 }

@@ -31,7 +31,7 @@ class LoginActivity : ComponentActivity() {
 
         setContent {
 
-            LoginScreen { googleLogin() }
+            LoginScreen()
         }
     }
 
