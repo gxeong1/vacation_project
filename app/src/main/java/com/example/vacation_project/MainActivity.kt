@@ -81,6 +81,7 @@ fun MainScreen() {
     }
 }
 
+
 @Composable
 fun BottomNav(navController: NavHostController) {
     val items = listOf(
@@ -144,7 +145,7 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier = Modif
             RankScreen()
         }
         composable(BottomNavItem.Profile.screenRoute) {
-            ProfileScreen()
+            ProfileScreen(navController, user = null)
         }
         composable(Routes.WriteScreen){
             WriteScreen(navController = navController)

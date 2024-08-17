@@ -123,32 +123,8 @@ fun LoginScreen(navController: NavController){
                 )
             }
         }else{
-            Text(text = "Hi, ${user!!.displayName}!",
-                fontFamily = FontFamily.SansSerif,
-                fontWeight = FontWeight.ExtraBold,
-                fontSize =  14.sp,
-                color = Color.White
-            )
-            Spacer(modifier = Modifier.height(35.dp))
-
-            Button(onClick = {
-                Firebase.auth.signOut()
-                user = null
-            },
-                shape = RoundedCornerShape(15.dp),
-                modifier = Modifier
-                    .height(50.dp)
-                    .fillMaxWidth()
-                    .padding(5.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                    contentColor = Color.Black)
-            ) {
-                Text(text = "Log Out",
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize =  15.sp,
-                    letterSpacing = 0.1.em    )
+            navController.navigate("main_screen") {
+                popUpTo("login_screen") { inclusive = true } // 로그인 화면을 백스택에서 제거
             }
         }
     }
