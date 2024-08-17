@@ -53,6 +53,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.em
+import androidx.navigation.NavController
 import com.example.vacation_project.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -69,34 +70,33 @@ import java.lang.Error
 
 
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun LoginScreen(navController: NavController){
     var user by remember { mutableStateOf(Firebase.auth.currentUser) }
     val token = stringResource(id = R.string.client_id)
     val context = LocalContext.current
-    val launcher = rememberFirebaseAuthLauncher(onAuthComplete = { result ->
-        user = result.user
-        navController.navigate("name_screen") // 로그인 성공 시 메인 화면으로 이동
-    }, onAuthError = {
-        user = null
-    })
+    val launcher = rememberFirebaseAuthLaunchar(onAuthComplete = { result ->
+        user = result.user },
+        onAuthError = {
+            user = null
+        }
+        )
 
-    Column(
-        modifier = Modifier.fillMaxSize(),
+    Column (modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        if (user == null) {
+        horizontalAlignment = Alignment.CenterHorizontally){
+        if(user == null){
             Spacer(modifier = Modifier.height(35.dp))
-            ElevatedButton(
-                onClick = {
-                    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(token)
-                        .requestEmail()
-                        .build()
+            ElevatedButton(onClick = {
+                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(token)
+                    .requestEmail()
+                    .build()
 
-                    val googleSignInClient = GoogleSignIn.getClient(context, gso)
-                    launcher.launch(googleSignInClient.signInIntent)
-                },
+                val googleSignInClient = GoogleSignIn.getClient(context,gso)
+                launcher.launch(googleSignInClient.signInIntent)
+
+
+            },
                 shape = RoundedCornerShape(35.dp),
                 modifier = Modifier
                     .height(50.dp)
@@ -104,8 +104,7 @@ fun LoginScreen(navController: NavHostController) {
                     .padding(5.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.White,
-                    contentColor = Color.Black
-                )
+                    contentColor = Color.Black)
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.loginimg),
@@ -116,45 +115,64 @@ fun LoginScreen(navController: NavHostController) {
 
                 Spacer(modifier = Modifier.width(12.dp))
 
-                Text(
-                    text = "회원가입",
+                Text(text = "회원가입",
                     fontFamily = FontFamily.SansSerif,
                     fontWeight = FontWeight.ExtraBold,
-                    fontSize = 15.sp,
+                    fontSize =  15.sp,
                     letterSpacing = 0.1.em
                 )
             }
-        } else {
-            // 로그인된 상태에서는 메인 화면으로 네비게이트
+        }else{
+            Text(text = "Hi, ${user!!.displayName}!",
+                fontFamily = FontFamily.SansSerif,
+                fontWeight = FontWeight.ExtraBold,
+                fontSize =  14.sp,
+                color = Color.White
+            )
+            Spacer(modifier = Modifier.height(35.dp))
 
-                navController.navigate("name_screen")
-
+            Button(onClick = {
+                Firebase.auth.signOut()
+                user = null
+            },
+                shape = RoundedCornerShape(15.dp),
+                modifier = Modifier
+                    .height(50.dp)
+                    .fillMaxWidth()
+                    .padding(5.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                    contentColor = Color.Black)
+            ) {
+                Text(text = "Log Out",
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize =  15.sp,
+                    letterSpacing = 0.1.em    )
+            }
         }
     }
 }
-
 @Composable
-fun rememberFirebaseAuthLauncher(
+fun rememberFirebaseAuthLaunchar(
     onAuthComplete: (AuthResult) -> Unit,
     onAuthError: (ApiException) -> Unit
-): ManagedActivityResultLauncher<Intent, ActivityResult> {
+): ManagedActivityResultLauncher<Intent,ActivityResult>{
     val scope = rememberCoroutineScope()
 
     return rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
-        try {
+        val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)//result->it
+        try{
             val account = task.getResult(ApiException::class.java)!!
-            Log.d("GoogleAuth", "account $account")
-            val credential = GoogleAuthProvider.getCredential(account.idToken!!, null)
+            Log.d("GoogleAuth","account $account")
+            val credential = GoogleAuthProvider.getCredential(account.idToken!!,null)
             scope.launch {
                 val authResult = Firebase.auth.signInWithCredential(credential).await()
                 onAuthComplete(authResult)
             }
-        } catch (e: ApiException) {
+        }catch (e: ApiException){
             Log.d("GoogleAuth", e.toString())
             onAuthError(e)
         }
     }
 }
-
-

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.navigation.compose.rememberNavController
 import com.example.vacation_project.MainActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -32,6 +33,8 @@ class LoginActivity : ComponentActivity() {
         setContent {
 
             //LoginScreen(navigat)
+            LoginScreen(navController = rememberNavController())
+
         }
     }
 

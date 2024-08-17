@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "214858816000-7auimk8trnf391k1m74bmm7ra6k3eeqp.apps.googleusercontent.com",
+          "client_id": "214858816000-fspe5qbak4b35m2ll11dm5c9shq2jquj.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.vacation_project",
-            "certificate_hash": "0fd2f3ada184263302ef4909b0812957bed7897b"
+            "certificate_hash": "072b0640e766686cdbc1ccef44c40f34fd0dcb54"
           }
         },
         {
