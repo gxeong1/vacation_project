@@ -75,7 +75,7 @@ fun LoginScreen(navController: NavHostController) {
     val context = LocalContext.current
     val launcher = rememberFirebaseAuthLauncher(onAuthComplete = { result ->
         user = result.user
-        navController.navigate("name_screen") // 로그인 성공 시 name_screen으로
+        navController.navigate("name_screen") // 로그인 성공 시 메인 화면으로 이동
     }, onAuthError = {
         user = null
     })
@@ -125,38 +125,10 @@ fun LoginScreen(navController: NavHostController) {
                 )
             }
         } else {
-            Text(
-                text = "Hi, ${user!!.displayName}!",
-                fontFamily = FontFamily.SansSerif,
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 14.sp,
-                color = Color.Black
-            )
-            Spacer(modifier = Modifier.height(35.dp))
+            // 로그인된 상태에서는 메인 화면으로 네비게이트
 
-            Button(
-                onClick = {
-                    Firebase.auth.signOut()
-                    user = null
-                },
-                shape = RoundedCornerShape(15.dp),
-                modifier = Modifier
-                    .height(50.dp)
-                    .fillMaxWidth()
-                    .padding(5.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                    contentColor = Color.Black
-                )
-            ) {
-                Text(
-                    text = "Log Out",
-                    fontFamily = FontFamily.SansSerif,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 15.sp,
-                    letterSpacing = 0.1.em
-                )
-            }
+                navController.navigate("name_screen")
+
         }
     }
 }
@@ -184,4 +156,5 @@ fun rememberFirebaseAuthLauncher(
         }
     }
 }
+
 
