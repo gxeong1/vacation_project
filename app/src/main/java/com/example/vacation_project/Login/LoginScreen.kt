@@ -63,6 +63,7 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.lang.Error
@@ -80,6 +81,12 @@ fun LoginScreen(navController: NavController){
             user = null
         }
         )
+
+    LaunchedEffect(user) {
+        if (user != null) {
+            checkName(navController, user?.uid)
+        }
+    }
 
     Column (modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -123,8 +130,8 @@ fun LoginScreen(navController: NavController){
                 )
             }
         }else{
-            navController.navigate("main_screen") {
-                popUpTo("login_screen") { inclusive = true } // 로그인 화면을 백스택에서 제거
+            navController.navigate("name_screen") {
+                popUpTo("login_screen") { inclusive = true }
             }
         }
     }
@@ -152,3 +159,20 @@ fun rememberFirebaseAuthLaunchar(
         }
     }
 }
+
+    fun checkName(navController : NavController, userId : String?){
+        userId?.let {
+            val db = FirebaseFirestore.getInstance()
+            db.collection("users").document(it).get().addOnSuccessListener { document ->
+                if (document.exists() && document.getString("nickname")?.isNotEmpty() == true) {
+                    navController.navigate("main_screen") {
+                        popUpTo("login_screen") { inclusive = true }
+                    }
+                } else {
+                    navController.navigate("name_screen") {
+                        popUpTo("login_screen") { inclusive = true }
+                    }
+                }
+            }
+        }
+    }
