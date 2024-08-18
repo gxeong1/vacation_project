@@ -158,8 +158,9 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier = Modif
 
             WriteScreen(navController = navController, userId = userId)
         }
-        composable(Routes.PostScreen){
-            PostScreen(navController = navController)
+        composable("${Routes.PostScreen}/{postId}") { backStackEntry ->
+            val postId = backStackEntry.arguments?.getString("postId") ?: ""
+            PostScreen(navController = navController, postId = postId)
         }
         composable(Routes.FilterScreen){
             FilterScreen(navController = navController)

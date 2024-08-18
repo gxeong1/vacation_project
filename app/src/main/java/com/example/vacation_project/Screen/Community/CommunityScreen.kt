@@ -1,5 +1,6 @@
 package com.example.vacation_project.Screen.Community
 
+import PostViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,7 +22,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.vacation_project.R
 import com.example.vacation_project.Routes
-import com.example.vacation_project.Screen.Community.PostViewModel.PostViewModel
 
 @Composable
 fun CommunityScreen(navController: NavHostController) {
@@ -32,7 +32,7 @@ fun CommunityScreen(navController: NavHostController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 10.dp) // 버튼이 겹치지 않도록 하단 여백 추가
+                .padding(bottom = 10.dp)
         ) {
             Spacer(modifier = Modifier.height(26.dp))
             Text(
@@ -55,7 +55,7 @@ fun CommunityScreen(navController: NavHostController) {
                         Subject = post.subject,
                         User = post.user,
                         onCLick = {
-                            navController.navigate(Routes.PostScreen)
+                            navController.navigate("${Routes.PostScreen}/${post.id}") // 게시물 ID를 함께 전달
                         }
                     )
                     Spacer(modifier = Modifier.height(10.dp))

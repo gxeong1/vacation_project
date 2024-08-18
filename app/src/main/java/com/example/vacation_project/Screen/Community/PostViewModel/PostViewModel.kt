@@ -1,9 +1,7 @@
-package com.example.vacation_project.Screen.Community.PostViewModel
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.vacation_project.Screen.Community.PostViewModel.Post
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,10 +27,34 @@ class PostViewModel : ViewModel() {
                         .get()
                         .await()
                         .map { document ->
-                            document.toObject(Post::class.java)
+                            val post = document.toObject(Post::class.java)
+                            // 문서 ID를 포함시킵니다.
+                            post.copy(id = document.id)
                         }
                 }
                 _posts.value = postsList
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    // 게시물 추가 메서드
+    fun addPost(title: String, subject: String, content: String, user: String) {
+        viewModelScope.launch {
+            try {
+                val newPost = Post(
+                    title = title,
+                    subject = subject,
+                    content = content,
+                    user = user
+                )
+                // Firestore에 새로운 게시물을 추가합니다.
+                val documentReference = firestore.collection("posts").add(newPost).await()
+                // ID를 포함하여 업데이트합니다.
+                val postId = documentReference.id
+                val postWithId = newPost.copy(id = postId)
+                _posts.value = _posts.value + postWithId
             } catch (e: Exception) {
                 e.printStackTrace()
             }

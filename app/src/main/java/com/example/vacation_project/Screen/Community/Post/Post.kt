@@ -49,9 +49,11 @@ fun Post(title : String, user : String, subject : String, text : String){
             .background(lineColor)
             .align(alignment = Alignment.CenterHorizontally))
 
-        Spacer(modifier = Modifier.height(15.dp))
+        Spacer(modifier = Modifier.height(30.dp))
 
         Text(text = text, fontSize = 18.sp)
+
+        Spacer(modifier = Modifier.height(20.dp))
     }
 
 
