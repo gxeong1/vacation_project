@@ -42,7 +42,6 @@ fun postContent(title: String, subject: String, content: String) {
         "title" to title,
         "subject" to subject,
         "content" to content,
-//        "timestamp" to System.currentTimeMillis() // 추가적인 메타데이터 (예: 타임스탬프)
     )
 
     firestore.collection("posts")

@@ -1,18 +1,18 @@
 package com.example.vacation_project.Screen.Community
 
-import android.widget.ImageButton
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -21,35 +21,57 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.vacation_project.R
 import com.example.vacation_project.Routes
+import com.example.vacation_project.Screen.Community.PostViewModel.PostViewModel
 
 @Composable
-fun CommunityScreen(navController: NavHostController){
-    Column (horizontalAlignment = Alignment.CenterHorizontally){
-        Spacer(modifier = Modifier.height(26.dp))
-        Text(text = "커뮤니티",
-            fontSize = 16.sp,
-            fontWeight = FontWeight.W600
-            )
-        Spacer(modifier = Modifier.height(25.dp))
-        QuestionCard(CardTitle = "제목",
-            Subject = "과목",
-            Content = "내용",
-            onCLick = {
-                navController.navigate(Routes.PostScreen)
-            })
-    }
+fun CommunityScreen(navController: NavHostController) {
+    val viewModel = remember { PostViewModel() }
+    val posts by viewModel.posts.collectAsState(emptyList())
 
-    Box(modifier = Modifier.size(150.dp)){
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 10.dp) // 버튼이 겹치지 않도록 하단 여백 추가
+        ) {
+            Spacer(modifier = Modifier.height(26.dp))
+            Text(
+                text = "커뮤니티",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W600,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+            Spacer(modifier = Modifier.height(25.dp))
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                items(posts) { post ->
+                    QuestionCard(
+                        CardTitle = post.title,
+                        Subject = post.subject,
+                        onCLick = {
+                            navController.navigate(Routes.PostScreen)
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                }
+            }
+        }
+
         ImageButton(
             imageResId = R.drawable.writebutton,
             contentDescription = "writeButton",
             onClick = {
                 navController.navigate(Routes.WriteScreen)
             },
+            size = 150,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(16.dp),
-            size = 150
+                .padding(16.dp)
         )
     }
 }
@@ -58,9 +80,9 @@ fun CommunityScreen(navController: NavHostController){
 fun ImageButton(
     imageResId: Int,
     contentDescription: String?,
-    onClick : () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    size : Int
+    size: Int
 ) {
     IconButton(onClick = onClick, modifier = modifier) {
         Image(

@@ -3,10 +3,14 @@ package com.example.vacation_project.Screen.Community
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -22,20 +26,25 @@ import com.example.vacation_project.R
 fun QuestionCard(
     CardTitle : String,
     Subject : String,
-    Content : String,
     onCLick : () -> Unit
 ){
     val backgroundColor = colorResource(id = R.color.sub_color)
-    Column(modifier = Modifier
-        .width(345.dp)
-        .height(106.dp)
-        .background(backgroundColor, RoundedCornerShape(12.dp))
-        .padding(top = 16.dp, start = 24.dp, end = 24.dp, bottom = 16.dp)
-        .clickable(onClick = onCLick)
-    ) {
-        Text(text = CardTitle, fontSize = 18.sp, fontWeight = FontWeight.W600)
-        Text(text = Subject, fontSize = 14.sp, fontWeight = FontWeight.W400)
-        Text(text = Content, fontSize = 16.sp, fontWeight = FontWeight.W400)
 
+    Card(
+        modifier = Modifier
+            .width(345.dp)
+            .height(90.dp)
+            .clickable { onCLick() },
+        elevation = CardDefaults.cardElevation(4.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(backgroundColor)
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(text = CardTitle, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(text = Subject, fontSize = 14.sp, color = Color.Gray)
+            Spacer(modifier = Modifier.height(8.dp))
+        }
     }
 }
