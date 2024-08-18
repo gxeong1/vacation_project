@@ -29,9 +29,11 @@ import androidx.compose.ui.window.Popup
 import com.example.vacation_project.R
 
 @Composable
-fun SubjectSelection() {
+fun SubjectSelection(
+    selectedSubject: String,
+    onSubjectChange: (String) -> Unit
+) {
     var isDropDownMenuExpanded by remember { mutableStateOf(false) }
-    var selectedSubject by remember { mutableStateOf("선택") }
 
     Column(modifier = Modifier
         .padding(end = 10.dp)
@@ -75,7 +77,7 @@ fun SubjectSelection() {
                             text = subject,
                             modifier = Modifier
                                 .clickable {
-                                    selectedSubject = subject
+                                    onSubjectChange(subject)
                                     isDropDownMenuExpanded = false
                                 }
                                 .padding(8.dp)

@@ -1,5 +1,6 @@
 package com.example.vacation_project.Screen.Community.Write
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,6 +17,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,19 +32,47 @@ import androidx.navigation.NavHostController
 import com.example.vacation_project.R
 import com.example.vacation_project.Routes
 import com.example.vacation_project.Screen.Community.ImageButton
+import com.google.firebase.firestore.FirebaseFirestore
+
+val firestore = FirebaseFirestore.getInstance()
+
+fun postContent(title: String, subject: String, content: String) {
+
+    val post = hashMapOf(
+        "title" to title,
+        "subject" to subject,
+        "content" to content,
+//        "timestamp" to System.currentTimeMillis() // 추가적인 메타데이터 (예: 타임스탬프)
+    )
+
+    firestore.collection("posts")
+        .add(post)
+        .addOnSuccessListener {
+            // 데이터 저장 성공 시
+            Log.d("Firestore", "글이 성공적으로 올라갔습니다.")
+        }
+        .addOnFailureListener { e ->
+            // 데이터 저장 실패 시
+            Log.w("Firestore", "오류 남", e)
+        }
+}
 
 @Composable
 fun WriteScreen(navController: NavHostController) {
+    // 상태 변수 정의
+    var title by remember { mutableStateOf("") }
+    var subject by remember { mutableStateOf("") }
+    var content by remember { mutableStateOf("") }
 
     val buttonColor = colorResource(id = R.color.main_color)
 
-    Column (modifier = Modifier.background(Color.White)){
+    Column(modifier = Modifier.background(Color.White)) {
         Spacer(modifier = Modifier.height(14.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
-        ){
+        ) {
             ImageButton(
                 imageResId = R.drawable.back,
                 contentDescription = "back",
@@ -53,18 +86,24 @@ fun WriteScreen(navController: NavHostController) {
                 text = "질문 작성",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.W600,
-                )
+            )
             Spacer(modifier = Modifier
                 .size(24.dp)
                 .padding(end = 24.dp))
-            }
+        }
 
         Spacer(modifier = Modifier
             .fillMaxWidth()
             .height(1.dp)
             .background(Color(0xFFE3E3E3)))
 
-        EditableTextField("제목", 44,20, true)
+        EditableTextField(
+            value = title,
+            onValueChange = { title = it },
+            label = "제목",
+            size = 44,
+            isSingleLine = true
+        )
 
         Spacer(modifier = Modifier
             .fillMaxWidth()
@@ -83,7 +122,10 @@ fun WriteScreen(navController: NavHostController) {
                 fontSize = 15.sp,
                 modifier = Modifier.padding(start = 10.dp)
             )
-            SubjectSelection()
+            SubjectSelection(
+                selectedSubject = subject,
+                onSubjectChange = { subject = it }
+            )
         }
 
         Spacer(modifier = Modifier
@@ -101,7 +143,9 @@ fun WriteScreen(navController: NavHostController) {
                 modifier = Modifier.weight(1f)
             ) {
                 EditableTextField(
-                    title = "내용",
+                    value = content,
+                    onValueChange = { content = it },
+                    label = "내용",
                     size = 430,
                     fontsize = 16,
                     isSingleLine = false
@@ -116,9 +160,12 @@ fun WriteScreen(navController: NavHostController) {
             )
         }
 
-
-
-        Button(onClick = { navController.navigate(Routes.CommunityScreen) },
+        Button(
+            onClick = {
+                // 포스트 작성 로직 구현
+                postContent(title, subject, content)
+                navController.navigate(Routes.CommunityScreen)
+            },
             modifier = Modifier
                 .align(alignment = Alignment.CenterHorizontally)
                 .width(345.dp)
@@ -128,6 +175,5 @@ fun WriteScreen(navController: NavHostController) {
         ) {
             Text(text = "완료", color = Color.Black)
         }
-        }
     }
-
+}

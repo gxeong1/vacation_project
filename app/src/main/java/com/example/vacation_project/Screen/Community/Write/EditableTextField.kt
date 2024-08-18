@@ -20,18 +20,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun EditableTextField(title: String, size: Int, fontsize: Int, isSingleLine: Boolean) {
-    var text by remember { mutableStateOf(TextFieldValue("")) }
-    var isEditing by remember { mutableStateOf(false) }
+fun EditableTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    size: Int,
+    fontsize: Int = 16,
+    isSingleLine: Boolean = true
+) {
+    var isEditing by remember { mutableStateOf(value.isNotEmpty()) }
 
     Column(
         modifier = Modifier
             .padding(start = 16.dp, end = 16.dp)
             .height(size.dp)
     ) {
-        if (!isEditing && text.text.isEmpty()) {
+        if (!isEditing && value.isEmpty()) {
             Text(
-                text = title,
+                text = label,
                 fontSize = fontsize.sp,
                 color = Color.Gray,
                 modifier = Modifier
@@ -40,8 +46,10 @@ fun EditableTextField(title: String, size: Int, fontsize: Int, isSingleLine: Boo
             )
         } else {
             BasicTextField(
-                value = text,
-                onValueChange = { text = it },
+                value = value,
+                onValueChange = { newValue ->
+                    onValueChange(newValue)
+                },
                 textStyle = TextStyle(
                     fontSize = fontsize.sp,
                     color = Color.Black
