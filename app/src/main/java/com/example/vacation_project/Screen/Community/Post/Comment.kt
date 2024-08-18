@@ -22,14 +22,14 @@ import androidx.compose.ui.unit.sp
 import com.example.vacation_project.R
 
 @Composable
-fun Comment(name: String, write: String, @DrawableRes rankRes: Int, @DrawableRes profileRes: Int) {
+fun CommentItem(name: String, text: String) {
     Column(modifier = Modifier.padding(20.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
+            // Profile Image Placeholder
             Image(
-                painter = painterResource(id = profileRes),
+                painter = painterResource(id = R.drawable.profile), // Profile image
                 contentDescription = "profile",
-                modifier = Modifier.size(35.dp)
-                    .clip(CircleShape)
+                modifier = Modifier.size(35.dp).clip(CircleShape)
             )
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -37,23 +37,19 @@ fun Comment(name: String, write: String, @DrawableRes rankRes: Int, @DrawableRes
             Text(
                 text = name,
                 fontSize = 14.sp,
+                fontWeight = FontWeight.Bold
             )
 
             Spacer(modifier = Modifier.width(8.dp))
-
-            Image(
-                painter = painterResource(id = rankRes),
-                contentDescription = "rank",
-                modifier = Modifier.size(24.dp)
-            )
         }
 
         Spacer(modifier = Modifier.height(6.dp))
 
         Text(
-            text = write,
+            text = text,
             fontSize = 16.sp,
             modifier = Modifier.padding(start = 8.dp)
         )
     }
 }
+

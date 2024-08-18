@@ -1,5 +1,7 @@
 package com.example.vacation_project.Screen.Community.Post
 
+import CommentsList
+import WriteComment
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,31 +30,36 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.vacation_project.R
 import com.example.vacation_project.Screen.Community.ImageButton
+import com.example.vacation_project.Screen.Community.PostViewModel.Comment
 import com.example.vacation_project.Screen.Community.PostViewModel.Post
 import com.google.firebase.firestore.FirebaseFirestore
+
+
 
 @Composable
 fun PostScreen(navController: NavHostController, postId: String) {
     val db = FirebaseFirestore.getInstance()
-    val context = LocalContext.current
-
     var post by remember { mutableStateOf<Post?>(null) }
+    var comments by remember { mutableStateOf<List<Comment>>(listOf()) }
     var isLoading by remember { mutableStateOf(true) }
+    var postUserName by remember { mutableStateOf("") }
 
-    // 게시물 데이터 가져오기
     LaunchedEffect(postId) {
         db.collection("posts").document(postId).get().addOnSuccessListener { document ->
             if (document.exists()) {
                 post = document.toObject(Post::class.java)
+                postUserName = post?.user ?: "" // 포스트의 사용자 이름을 가져옵니다
+                fetchComments(postId) { fetchedComments ->
+                    comments = fetchedComments
+                    isLoading = false
+                }
             }
-            isLoading = false
         }.addOnFailureListener { exception ->
             Log.w("PostScreen", "Error getting document.", exception)
             isLoading = false
@@ -60,13 +67,16 @@ fun PostScreen(navController: NavHostController, postId: String) {
     }
 
     if (isLoading) {
-        // 로딩 중 UI
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
     } else {
         post?.let {
-            Column(modifier = Modifier.background(Color.White)) {
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)) {
+
+                // 상단 내용
                 Spacer(modifier = Modifier.height(14.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -109,50 +119,58 @@ fun PostScreen(navController: NavHostController, postId: String) {
                     .background(colorResource(id = R.color.line_color))
                     .align(alignment = Alignment.CenterHorizontally))
 
-                Comment(name = "닉네임", write = "답변 " + "\n" + "내용", rankRes = R.drawable.rank, profileRes = R.drawable.profile)
+                CommentsList(comments)
+
+                Spacer(modifier = Modifier.height(15.dp))
 
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(bottom = 20.dp)
+                        .padding(horizontal = 16.dp, vertical = 8.dp), // Adjust padding as needed
+                    contentAlignment = Alignment.BottomCenter
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .size(345.dp, 50.dp)
-                            .background(colorResource(id = R.color.sub_color2), shape = RoundedCornerShape(100.dp))
-                            .align(Alignment.BottomCenter)
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.commentwrite),
-                            contentDescription = "comment write",
-                            modifier = Modifier.size(40.dp)
-                                .padding(start = 10.dp, top = 12.dp)
-                        )
-
-                        Spacer(modifier = Modifier.width(4.dp))
-
-                        Text(
-                            text = "답변 작성", color = Color.White, fontSize = 15.sp,
-                            modifier = Modifier.padding(top = 12.dp)
-                        )
-
-                        Spacer(modifier = Modifier.weight(1f))
-
-                        ImageButton(
-                            imageResId = R.drawable.send,
-                            contentDescription = "send",
-                            onClick = { /*TODO*/ },
-                            modifier = Modifier.padding(end = 10.dp),
-                            size = 24
-                        )
+                    WriteComment { commentText ->
+                        val newComment = Comment(name = postUserName, text = commentText)
+                        addComment(postId, newComment)  // 댓글 추가
+                        fetchComments(postId) { fetchedComments ->
+                            comments = fetchedComments
+                        }
                     }
                 }
             }
         } ?: run {
-            // 게시물이 없거나 로딩 실패 시 표시할 UI
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text("게시물을 불러오는 데 실패했습니다.")
             }
         }
     }
+}
+
+// 댓글 편집
+private fun fetchComments(postId: String, onResult: (List<Comment>) -> Unit) {
+    val db = FirebaseFirestore.getInstance()
+    db.collection("posts").document(postId).collection("comments")
+        .get()
+        .addOnSuccessListener { result ->
+            val commentsList = result.map { document ->
+                document.toObject(Comment::class.java).copy(id = document.id)
+            }
+            onResult(commentsList)
+        }
+        .addOnFailureListener { exception ->
+            Log.w("PostScreen", "Error getting comments.", exception)
+            onResult(emptyList())  // 실패 시 빈 리스트 반환
+        }
+}
+
+private fun addComment(postId: String, comment: Comment) {
+    val db = FirebaseFirestore.getInstance()
+    db.collection("posts").document(postId).collection("comments")
+        .add(comment)
+        .addOnSuccessListener { documentReference ->
+            Log.d("PostScreen", "Comment added with ID: ${documentReference.id}")
+        }
+        .addOnFailureListener { e ->
+            Log.w("PostScreen", "Error adding comment", e)
+        }
 }
