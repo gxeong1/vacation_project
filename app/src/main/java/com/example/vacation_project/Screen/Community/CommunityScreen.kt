@@ -53,6 +53,7 @@ fun CommunityScreen(navController: NavHostController) {
                     QuestionCard(
                         CardTitle = post.title,
                         Subject = post.subject,
+                        User = post.user,
                         onCLick = {
                             navController.navigate(Routes.PostScreen)
                         }
@@ -75,6 +76,7 @@ fun CommunityScreen(navController: NavHostController) {
         )
     }
 }
+
 
 @Composable
 fun ImageButton(

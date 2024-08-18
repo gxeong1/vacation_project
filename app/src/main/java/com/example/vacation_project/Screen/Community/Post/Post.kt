@@ -26,17 +26,17 @@ fun Post(title : String, user : String, subject : String, text : String){
         Text(text = title, fontSize = 24.sp, fontWeight = FontWeight.W600)
 
         Spacer(modifier = Modifier.height(5.dp))
-        
+
         Row (modifier = Modifier.height(20.dp)){
             Text(text = user,
                 fontSize = 16.sp,)
 
             Spacer(modifier = Modifier.width(5.dp))
-            
+
             Text(text = "|", fontSize = 16.sp)
 
             Spacer(modifier = Modifier.width(5.dp))
-            
+
             Text(text = subject,
                 fontSize = 16.sp,)
         }
@@ -50,9 +50,9 @@ fun Post(title : String, user : String, subject : String, text : String){
             .align(alignment = Alignment.CenterHorizontally))
 
         Spacer(modifier = Modifier.height(15.dp))
-        
+
         Text(text = text, fontSize = 18.sp)
     }
-    
-    
+
+
 }

@@ -4,4 +4,5 @@ data class Post(
     val title: String = "",
     val subject: String = "",
     val content: String = "",
+    val user: String = ""
 )

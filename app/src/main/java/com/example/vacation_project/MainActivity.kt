@@ -152,7 +152,11 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier = Modif
             ProfileScreen(navController, user = null)
         }
         composable(Routes.WriteScreen){
-            WriteScreen(navController = navController)
+            val auth = FirebaseAuth.getInstance()
+            val currentUser = auth.currentUser
+            val userId = currentUser?.uid ?: ""
+
+            WriteScreen(navController = navController, userId = userId)
         }
         composable(Routes.PostScreen){
             PostScreen(navController = navController)

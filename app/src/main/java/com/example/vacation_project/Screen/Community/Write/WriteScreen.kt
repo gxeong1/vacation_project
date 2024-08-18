@@ -2,21 +2,13 @@ package com.example.vacation_project.Screen.Community.Write
 
 import android.util.Log
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -32,36 +25,27 @@ import androidx.navigation.NavHostController
 import com.example.vacation_project.R
 import com.example.vacation_project.Routes
 import com.example.vacation_project.Screen.Community.ImageButton
+import com.example.vacation_project.Screen.Community.PostViewModel.Post
 import com.google.firebase.firestore.FirebaseFirestore
 
-val firestore = FirebaseFirestore.getInstance()
-
-fun postContent(title: String, subject: String, content: String) {
-
-    val post = hashMapOf(
-        "title" to title,
-        "subject" to subject,
-        "content" to content,
-    )
-
-    firestore.collection("posts")
-        .add(post)
-        .addOnSuccessListener {
-            // 데이터 저장 성공 시
-            Log.d("Firestore", "글이 성공적으로 올라갔습니다.")
-        }
-        .addOnFailureListener { e ->
-            // 데이터 저장 실패 시
-            Log.w("Firestore", "오류 남", e)
-        }
-}
-
 @Composable
-fun WriteScreen(navController: NavHostController) {
+fun WriteScreen(navController: NavHostController, userId: String) {
     // 상태 변수 정의
     var title by remember { mutableStateOf("") }
     var subject by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
+    var nickname by remember { mutableStateOf<String?>(null) }
+    val db = FirebaseFirestore.getInstance()
+    val context = LocalContext.current
+
+    // 사용자 닉네임 불러오기
+    LaunchedEffect(userId) {
+        db.collection("users").document(userId).get().addOnSuccessListener { document ->
+            if (document.exists()) {
+                nickname = document.getString("nickname")
+            }
+        }
+    }
 
     val buttonColor = colorResource(id = R.color.main_color)
 
@@ -161,9 +145,28 @@ fun WriteScreen(navController: NavHostController) {
 
         Button(
             onClick = {
-                // 포스트 작성 로직 구현
-                postContent(title, subject, content)
-                navController.navigate(Routes.CommunityScreen)
+                if (nickname != null) {
+                    // Post 객체 생성 시 닉네임 포함
+                    val post = Post(
+                        title = title,
+                        subject = subject,
+                        content = content,
+                        user = nickname!!
+                    )
+
+                    // Firestore에 게시물 저장
+                    db.collection("posts")
+                        .add(post)
+                        .addOnSuccessListener {
+                            Log.d("Firestore", "글이 성공적으로 올라갔습니다.")
+                            navController.navigate(Routes.CommunityScreen)
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w("Firestore", "오류 발생", e)
+                        }
+                } else {
+                    Log.w("Firestore", "닉네임을 불러오지 못했습니다.")
+                }
             },
             modifier = Modifier
                 .align(alignment = Alignment.CenterHorizontally)

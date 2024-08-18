@@ -26,6 +26,7 @@ import com.example.vacation_project.R
 fun QuestionCard(
     CardTitle : String,
     Subject : String,
+    User : String,
     onCLick : () -> Unit
 ){
     val backgroundColor = colorResource(id = R.color.sub_color)
@@ -33,7 +34,7 @@ fun QuestionCard(
     Card(
         modifier = Modifier
             .width(345.dp)
-            .height(90.dp)
+            .height(106.dp)
             .clickable { onCLick() },
         elevation = CardDefaults.cardElevation(4.dp),
         shape = RoundedCornerShape(12.dp),
@@ -41,10 +42,13 @@ fun QuestionCard(
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = CardTitle, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(2.dp))
 
             Text(text = Subject, fontSize = 14.sp, color = Color.Gray)
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(2.dp))
+
+            Text(text = User, fontSize = 12.sp, color = Color.Gray)
+            Spacer(modifier = Modifier.height(4.dp))
         }
     }
 }
