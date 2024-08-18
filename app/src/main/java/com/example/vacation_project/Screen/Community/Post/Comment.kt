@@ -25,7 +25,7 @@ import com.example.vacation_project.R
 fun CommentItem(name: String, text: String) {
     Column(modifier = Modifier.padding(20.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            // Profile Image Placeholder
+
             Image(
                 painter = painterResource(id = R.drawable.profile), // Profile image
                 contentDescription = "profile",
@@ -52,4 +52,3 @@ fun CommentItem(name: String, text: String) {
         )
     }
 }
-

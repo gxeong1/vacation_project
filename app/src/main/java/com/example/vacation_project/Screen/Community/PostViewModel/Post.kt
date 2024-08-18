@@ -7,7 +7,7 @@ data class Post(
     val subject: String = "",
     val content: String = "",
     val user: String = "",
-    val comments: List<Comment> = listOf()
+    val comments: List<Comment> = listOf(),
 )
 
 data class Comment(

@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.firebase.auth)
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.firebase.storage.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -87,4 +88,5 @@ dependencies {
 
     // Compose Material3
     implementation("androidx.compose.material3:material3:1.1.0")
+    implementation("io.coil-kt:coil-compose:2.2.2")
 }

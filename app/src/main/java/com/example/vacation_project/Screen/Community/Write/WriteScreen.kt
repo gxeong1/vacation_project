@@ -1,6 +1,9 @@
 package com.example.vacation_project.Screen.Community.Write
 
+import android.net.Uri
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,6 +30,8 @@ import com.example.vacation_project.Routes
 import com.example.vacation_project.Screen.Community.ImageButton
 import com.example.vacation_project.Screen.Community.PostViewModel.Post
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import java.util.UUID
 
 @Composable
 fun WriteScreen(navController: NavHostController, userId: String) {
@@ -36,7 +41,6 @@ fun WriteScreen(navController: NavHostController, userId: String) {
     var content by remember { mutableStateOf("") }
     var nickname by remember { mutableStateOf<String?>(null) }
     val db = FirebaseFirestore.getInstance()
-    val context = LocalContext.current
 
     // 사용자 닉네임 불러오기
     LaunchedEffect(userId) {
@@ -137,7 +141,7 @@ fun WriteScreen(navController: NavHostController, userId: String) {
             ImageButton(
                 imageResId = R.drawable.image,
                 contentDescription = "image",
-                onClick = { /* TODO */ },
+                onClick = {  },
                 size = 19,
                 modifier = Modifier.align(Alignment.Top)
             )
@@ -145,7 +149,7 @@ fun WriteScreen(navController: NavHostController, userId: String) {
 
         Button(
             onClick = {
-                if (nickname != null) {
+                if (nickname != null ) {
                     // Post 객체 생성 시 닉네임 포함
                     val post = Post(
                         title = title,

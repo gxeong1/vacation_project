@@ -11,7 +11,7 @@ import androidx.compose.foundation.lazy.items
 
 @Composable
 fun CommentsList(comments: List<Comment>) {
-    LazyColumn (modifier = Modifier.height(350.dp)){
+    LazyColumn {
         items(comments) { comment ->
             CommentItem(
                 name = comment.name,
