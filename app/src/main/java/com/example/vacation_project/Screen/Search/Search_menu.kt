@@ -25,15 +25,9 @@ import com.example.vacation_project.Routes
 fun Search_menu(navController: NavHostController) {
     Column(
         modifier = Modifier
-            .fillMaxSize()
             .padding(30.dp),
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+        Row {
                 Text(
                     text = "추천순",
                     fontSize = 16.sp,
@@ -53,7 +47,6 @@ fun Search_menu(navController: NavHostController) {
                         .size(24.dp)
                         .clickable { navController.navigate(Routes.FilterScreen)}
                 )
-            }
         }
     }
 }
