@@ -26,10 +26,10 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.traceEventEnd
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,7 +38,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontVariation.width
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.FontWeight.Companion.W400
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,8 +46,14 @@ import com.example.vacation_project.R
 import com.example.vacation_project.Routes
 import com.example.vacation_project.Screen.Community.ImageButton
 
+// 전역 상태를 위한 배열 선언
+val selectedButtons = mutableStateListOf<String>()
+
 @Composable
 fun FilterScreen(navController: NavHostController) {
+    // 이전 상태를 기억하여 화면 재구성 시 유지
+    val selectedButtons = remember { selectedButtons }
+
     Column (modifier = Modifier.background(Color.White)) {
         Spacer(modifier = Modifier.height(14.dp))
         Row(
@@ -74,9 +79,9 @@ fun FilterScreen(navController: NavHostController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(50.dp))
-        SubjectSelection()
+        SubjectSelection(selectedButtons)
         Spacer(modifier = Modifier.height(50.dp))
-        GradeSelection()
+        GradeSelection(selectedButtons)
         Spacer(modifier = Modifier.height(50.dp))
         PriceRangeInput()
         Spacer(modifier = Modifier.height(150.dp))
@@ -85,7 +90,7 @@ fun FilterScreen(navController: NavHostController) {
 }
 
 @Composable
-fun SubjectSelection() {
+fun SubjectSelection(selectedButtons: MutableList<String>) {
     val subjects = listOf("국어", "영어", "수학", "사회", "과학", "역사")
     var selectedSubject by remember { mutableStateOf("") }
 
@@ -107,7 +112,11 @@ fun SubjectSelection() {
             ) {
                 rowSubjects.forEach { subject ->
                     Button(
-                        onClick = { selectedSubject = subject },
+                        onClick = {
+                            selectedSubject = subject
+                            selectedButtons.clear()
+                            selectedButtons.add(subject)
+                        },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = if (selectedSubject == subject) Color.Gray else Color(0xFF8AB0B9)
                         ),
@@ -126,7 +135,7 @@ fun SubjectSelection() {
 }
 
 @Composable
-fun GradeSelection() {
+fun GradeSelection(selectedButtons: MutableList<String>) {
     val grades = listOf("1학년", "2학년", "3학년")
     var selectedGrade by remember { mutableStateOf("") }
 
@@ -146,7 +155,11 @@ fun GradeSelection() {
         ) {
             grades.forEach { grade ->
                 Button(
-                    onClick = { selectedGrade = grade },
+                    onClick = {
+                        selectedGrade = grade
+                        selectedButtons.clear()
+                        selectedButtons.add(grade)
+                    },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = if (selectedGrade == grade) Color.Gray else Color(0xFF8AB0B9)
                     ),
