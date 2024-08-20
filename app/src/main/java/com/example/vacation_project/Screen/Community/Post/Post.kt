@@ -23,22 +23,22 @@ fun Post(title : String, user : String, subject : String, text : String){
     val lineColor = colorResource(id = R.color.line_color)
 
     Column (modifier = Modifier.padding(start = 22.dp, top = 5.dp)){
-        Text(text = title, fontSize = 24.sp, fontWeight = FontWeight.W600)
+        Text(text = title, fontSize = 20.sp, fontWeight = FontWeight.W600)
 
         Spacer(modifier = Modifier.height(5.dp))
 
         Row (modifier = Modifier.height(20.dp)){
             Text(text = user,
-                fontSize = 16.sp,)
+                fontSize = 14.sp,)
 
             Spacer(modifier = Modifier.width(5.dp))
 
-            Text(text = "|", fontSize = 16.sp)
+            Text(text = "|", fontSize = 14.sp)
 
             Spacer(modifier = Modifier.width(5.dp))
 
             Text(text = subject,
-                fontSize = 16.sp,)
+                fontSize = 14.sp,)
         }
 
         Spacer(modifier = Modifier.height(15.dp))
@@ -49,11 +49,11 @@ fun Post(title : String, user : String, subject : String, text : String){
             .background(lineColor)
             .align(alignment = Alignment.CenterHorizontally))
 
-        Spacer(modifier = Modifier.height(30.dp))
+        Spacer(modifier = Modifier.height(15.dp))
 
-        Text(text = text, fontSize = 18.sp)
+        Text(text = text, fontSize = 14.sp)
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(15.dp))
     }
 
 

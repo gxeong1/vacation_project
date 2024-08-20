@@ -36,7 +36,6 @@ fun QuestionCard(
             .width(345.dp)
             .height(106.dp)
             .clickable { onCLick() },
-        elevation = CardDefaults.cardElevation(4.dp),
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(backgroundColor)
     ) {
