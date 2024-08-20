@@ -2,7 +2,9 @@ package com.example.vacation_project.Screen.Search
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -22,13 +24,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.vacation_project.R
 
+var showTestText by mutableStateOf(false)
 @Composable
-fun SearchBar() {
+fun SearchBar(navController: NavHostController) {
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
+    var isSearchClicked by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -47,25 +53,29 @@ fun SearchBar() {
                 value = searchQuery,
                 onValueChange = { newValue -> searchQuery = newValue },
                 modifier = Modifier.weight(1f),
+                textStyle = TextStyle(color = Color.Black),
                 decorationBox = { innerTextField ->
-                    // 검색어가 비어있는지 확인할 때 `searchQuery.text`를 사용
                     if (searchQuery.text.isEmpty()) {
                         Text(
                             text = "검색",
                             color = Color.Black
                         )
                     }
-                    innerTextField()
+                    innerTextField() // This renders the actual text typed by the user
                 }
             )
-            IconButton(onClick = { /* 검색 아이콘 클릭 시 동작 */ }) {
+            IconButton(onClick = { isSearchClicked = true }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.searchscreen_search),  // 검색 아이콘 리소스 경로
+                    painter = painterResource(id = R.drawable.searchscreen_search),
                     contentDescription = "검색",
                     tint = Color.Black,
-                    modifier = Modifier.size(24.dp)  // 아이콘 크기를 32dp로 설정
+                    modifier = Modifier.size(24.dp)
                 )
             }
         }
+    }
+
+    if (isSearchClicked) {
+        SearchResult(navController)
     }
 }
