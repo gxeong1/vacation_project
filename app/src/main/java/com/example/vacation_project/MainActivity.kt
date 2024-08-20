@@ -34,7 +34,9 @@ import com.example.vacation_project.Login.LoginScreen
 import com.example.vacation_project.Login.NameScreen
 import com.example.vacation_project.Screen.Community.Post.PostScreen
 import com.example.vacation_project.Screen.Community.Write.WriteScreen
+import com.example.vacation_project.Screen.Search.BookDetailScreen
 import com.example.vacation_project.Screen.Search.FilterScreen
+import com.example.vacation_project.Screen.Search.ReviewScreen
 import com.example.vacation_project.Screen.Search.SearchScreen
 import com.google.firebase.auth.FirebaseAuth
 import java.util.logging.Filter
