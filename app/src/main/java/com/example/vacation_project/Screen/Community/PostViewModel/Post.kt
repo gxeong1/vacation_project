@@ -8,6 +8,7 @@ data class Post(
     val content: String = "",
     val user: String = "",
     val comments: List<Comment> = listOf(),
+    var imageUrl: String? = null
 )
 
 data class Comment(

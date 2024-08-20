@@ -40,7 +40,10 @@ fun WriteScreen(navController: NavHostController, userId: String) {
     var subject by remember { mutableStateOf("") }
     var content by remember { mutableStateOf("") }
     var nickname by remember { mutableStateOf<String?>(null) }
+    var imageUri by remember { mutableStateOf<Uri?>(null) } // 이미지 URI 상태
+
     val db = FirebaseFirestore.getInstance()
+    val storage = FirebaseStorage.getInstance()
 
     // 사용자 닉네임 불러오기
     LaunchedEffect(userId) {
@@ -52,6 +55,12 @@ fun WriteScreen(navController: NavHostController, userId: String) {
     }
 
     val buttonColor = colorResource(id = R.color.main_color)
+    val context = LocalContext.current
+
+    // 이미지 선택을 위한 ActivityResultLauncher 생성
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        imageUri = uri
+    }
 
     Column(modifier = Modifier.background(Color.White)) {
         Spacer(modifier = Modifier.height(14.dp))
@@ -141,7 +150,7 @@ fun WriteScreen(navController: NavHostController, userId: String) {
             ImageButton(
                 imageResId = R.drawable.image,
                 contentDescription = "image",
-                onClick = {  },
+                onClick = { launcher.launch("image/*") }, // 이미지 선택 버튼 클릭 시
                 size = 19,
                 modifier = Modifier.align(Alignment.Top)
             )
@@ -149,25 +158,50 @@ fun WriteScreen(navController: NavHostController, userId: String) {
 
         Button(
             onClick = {
-                if (nickname != null ) {
-                    // Post 객체 생성 시 닉네임 포함
+                if (nickname != null) {
+                    // Firestore에 게시물 저장
                     val post = Post(
                         title = title,
                         subject = subject,
                         content = content,
-                        user = nickname!!
+                        user = nickname!!,
+                        imageUrl = null // 이미지 URL은 나중에 추가
                     )
 
-                    // Firestore에 게시물 저장
-                    db.collection("posts")
-                        .add(post)
-                        .addOnSuccessListener {
-                            Log.d("Firestore", "글이 성공적으로 올라갔습니다.")
-                            navController.navigate(Routes.CommunityScreen)
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w("Firestore", "오류 발생", e)
-                        }
+                    // Firebase Storage에 이미지 업로드
+                    imageUri?.let { uri ->
+                        val storageRef = storage.reference.child("images/${UUID.randomUUID()}.jpg")
+                        storageRef.putFile(uri)
+                            .addOnSuccessListener {
+                                storageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
+                                    post.imageUrl = downloadUrl.toString()
+                                    // Firestore에 게시물 저장
+                                    db.collection("posts")
+                                        .add(post)
+                                        .addOnSuccessListener {
+                                            Log.d("Firestore", "글이 성공적으로 올라갔습니다.")
+                                            navController.navigate(Routes.CommunityScreen)
+                                        }
+                                        .addOnFailureListener { e ->
+                                            Log.w("Firestore", "오류 발생", e)
+                                        }
+                                }
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w("Storage", "이미지 업로드 실패", e)
+                            }
+                    } ?: run {
+                        // 이미지가 선택되지 않은 경우 Firestore에 게시물 저장
+                        db.collection("posts")
+                            .add(post)
+                            .addOnSuccessListener {
+                                Log.d("Firestore", "글이 성공적으로 올라갔습니다.")
+                                navController.navigate(Routes.CommunityScreen)
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w("Firestore", "오류 발생", e)
+                            }
+                    }
                 } else {
                     Log.w("Firestore", "닉네임을 불러오지 못했습니다.")
                 }

@@ -34,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.rememberImagePainter
 import com.example.vacation_project.R
 import com.example.vacation_project.Screen.Community.ImageButton
 import com.example.vacation_project.Screen.Community.PostViewModel.Comment
@@ -111,6 +112,13 @@ fun PostScreen(navController: NavHostController, postId: String) {
                     text = it.content
                 )
 
+                // 이미지 표시
+                it.imageUrl?.let { url ->
+                    Image(painter = rememberImagePainter(url),
+                        contentDescription = "Post Image",
+                        modifier = Modifier.fillMaxWidth())
+                }
+
                 Spacer(modifier = Modifier.height(15.dp))
 
                 Spacer(modifier = Modifier
@@ -145,6 +153,7 @@ fun PostScreen(navController: NavHostController, postId: String) {
         }
     }
 }
+
 
 // 댓글 편집
 private fun fetchComments(postId: String, onResult: (List<Comment>) -> Unit) {
