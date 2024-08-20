@@ -23,21 +23,28 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.vacation_project.BottomNavItem
 import com.example.vacation_project.R
 import com.example.vacation_project.Routes
 
 @Composable
-fun SearchScreen(navController: NavHostController){
-    Column (horizontalAlignment = Alignment.CenterHorizontally) {
+fun SearchScreen(navController: NavHostController) {
+    var showResults by remember { mutableStateOf(false) }
+
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.height(26.dp))
+
         Text(
             text = "검색",
             fontSize = 16.sp,
             fontWeight = FontWeight.W600
         )
-        SearchBar()
+
+
+        SearchBar(navController)
         Search_menu(navController)
+
+        if (showResults) {
+            SearchResult(navController)
+        }
     }
 }
-
