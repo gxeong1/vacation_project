@@ -165,6 +165,12 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier = Modif
         composable(Routes.FilterScreen){
             FilterScreen(navController = navController)
         }
+        composable(Routes.BookDetailScreen){
+            BookDetailScreen(navController = navController)
+        }
+        composable(Routes.ReviewScreen){
+            ReviewScreen(navController )
+        }
     }
 }
 
@@ -189,5 +195,7 @@ object Routes {
     const val WriteScreen = "WriteScreen"
     const val PostScreen = "PostScreen"
     const val FilterScreen = "FilterScreen"
+    const val BookDetailScreen = "BookDetailScreen"
+    const val ReviewScreen = "ReviewScreen"
 
 }
