@@ -30,7 +30,9 @@ fun WriteComment(onSendClick: (String) -> Unit) {
         OutlinedTextField(
             value = commentText,
             onValueChange = { commentText = it },
-            placeholder = { Text(text = "댓글을 입력하세요", color = Color.White) },
+            placeholder = { Text(text = "댓글을 입력하세요",
+                color = Color.White,
+                fontSize = 14.sp) },
             modifier = Modifier
                 .weight(1f)
                 .padding(start = 10.dp),

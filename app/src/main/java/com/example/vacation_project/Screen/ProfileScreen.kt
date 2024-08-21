@@ -41,6 +41,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 fun ProfileScreen(navController: NavController, user: FirebaseUser?) {
     var user by remember { mutableStateOf(Firebase.auth.currentUser) }
     var nickname by remember { mutableStateOf<String?>(null) }
+    var commentCount by remember { mutableStateOf(0) }
+    var rank by remember { mutableStateOf("1단계") }
+    var description by remember { mutableStateOf("심기 전 씨앗") }
     val buttonColor = colorResource(id = R.color.main_color)
     val context = LocalContext.current
     val token = stringResource(id = R.string.client_id)
@@ -58,11 +61,32 @@ fun ProfileScreen(navController: NavController, user: FirebaseUser?) {
             db.collection("users").document(it.uid).get().addOnSuccessListener { document ->
                 if (document.exists()) {
                     nickname = document.getString("nickname")
+                    commentCount = document.getLong("commentCount")?.toInt() ?: 0
+
+                    // 댓글 수에 따라 단계 설정
+                    when {
+                        commentCount >= 100 -> {
+                            rank = "4단계"
+                            description = "다 자란 나무"
+                        }
+                        commentCount >= 50 -> {
+                            rank = "3단계"
+                            description = "거의 자란 새싹"
+                        }
+                        commentCount >= 20 -> {
+                            rank = "2단계"
+                            description = "조금 자란 새싹"
+                        }
+                        commentCount >= 0 -> {
+                            rank = "1단계"
+                            description = "심기 전 씨앗"
+                        }
+                    }
                 } else {
                     nickname = "닉네임 없음"
                 }
             }.addOnFailureListener {
-                Toast.makeText(context, "닉네임을 불러오는 데 실패했습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "데이터를 불러오는 데 실패했습니다.", Toast.LENGTH_SHORT).show()
                 nickname = "닉네임 없음"
             }
         }
@@ -84,10 +108,8 @@ fun ProfileScreen(navController: NavController, user: FirebaseUser?) {
         Spacer(modifier = Modifier.height(40.dp))
 
         user?.let {
-            
             Row {
                 Column {
-                    // 닉네임 표시
                     Text(
                         text = "${nickname ?: "닉네임 로딩 중..."}",
                         fontSize = 20.sp,
@@ -97,8 +119,6 @@ fun ProfileScreen(navController: NavController, user: FirebaseUser?) {
                             .padding(start = 30.dp)
                     )
                     Spacer(modifier = Modifier.height(4.dp))
-
-                    // 이메일 표시
                     Text(
                         text = "${it.email ?: "이메일 없음"}",
                         fontSize = 13.sp,
@@ -109,25 +129,20 @@ fun ProfileScreen(navController: NavController, user: FirebaseUser?) {
                             .padding(start = 30.dp)
                     )
                 }
-
                 Spacer(modifier = Modifier.width(100.dp))
-
                 Image(painter = painterResource(id = R.drawable.profile),
                     contentDescription = "프로필",
                     modifier = Modifier.size(70.dp))
-
-                }
             }
-             ?: run {
+        } ?: run {
             TextButton(onClick = {
                 val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken(token)
                     .requestEmail()
                     .build()
-
                 val googleSignInClient = GoogleSignIn.getClient(context,gso)
                 launcher.launch(googleSignInClient.signInIntent)
-            }, ) {
+            }) {
                 Text(
                     text = "로그인이 필요합니다.",
                     fontSize = 16.sp,
@@ -138,7 +153,13 @@ fun ProfileScreen(navController: NavController, user: FirebaseUser?) {
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        RankCard(rank = "1단계", description = "심기 전 씨앗", imageResId = R.drawable.rank1)
+        // 등급 카드 표시
+        RankCard(rank = rank, description = description, imageResId = when(rank) {
+            "4단계" -> R.drawable.rank4
+            "3단계" -> R.drawable.rank3
+            "2단계" -> R.drawable.rank2
+            else -> R.drawable.rank1
+        })
 
         Spacer(modifier = Modifier.height(30.dp))
 
@@ -170,17 +191,12 @@ fun ProfileScreen(navController: NavController, user: FirebaseUser?) {
             )
         }
 
-
         Box(modifier = Modifier.fillMaxSize()) {
             Button(
                 onClick = {
-                    // 로그아웃 처리
                     FirebaseAuth.getInstance().signOut()
-
-                    // 로그아웃 완료 메시지 표시
                     Toast.makeText(context, "로그아웃되었습니다.", Toast.LENGTH_SHORT).show()
                     navController.popBackStack()
-
                 },
                 modifier = Modifier
                     .width(345.dp)
@@ -194,6 +210,7 @@ fun ProfileScreen(navController: NavController, user: FirebaseUser?) {
         }
     }
 }
+
 
 
 @Composable

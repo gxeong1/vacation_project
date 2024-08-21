@@ -141,6 +141,8 @@ fun BottomNav(navController: NavHostController) {
 @Composable
 fun NavigationGraph(navController: NavHostController) {
     NavHost(navController = navController, startDestination = BottomNavItem.Community.screenRoute, Modifier.fillMaxSize()) {
+        val user = FirebaseAuth.getInstance().currentUser
+
         composable(BottomNavItem.Community.screenRoute) {
             CommunityScreen(navController)
         }
@@ -148,7 +150,7 @@ fun NavigationGraph(navController: NavHostController) {
             SearchScreen(navController = navController)
         }
         composable(BottomNavItem.Rank.screenRoute) {
-            RankScreen()
+            RankScreen(navController, user = user)
         }
         composable(BottomNavItem.Profile.screenRoute) {
             ProfileScreen(navController, user = null)

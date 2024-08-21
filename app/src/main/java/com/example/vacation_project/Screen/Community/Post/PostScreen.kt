@@ -39,6 +39,8 @@ import com.example.vacation_project.R
 import com.example.vacation_project.Screen.Community.ImageButton
 import com.example.vacation_project.Screen.Community.PostViewModel.Comment
 import com.example.vacation_project.Screen.Community.PostViewModel.Post
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -174,12 +176,30 @@ private fun fetchComments(postId: String, onResult: (List<Comment>) -> Unit) {
 
 private fun addComment(postId: String, comment: Comment) {
     val db = FirebaseFirestore.getInstance()
-    db.collection("posts").document(postId).collection("comments")
-        .add(comment)
-        .addOnSuccessListener { documentReference ->
-            Log.d("PostScreen", "Comment added with ID: ${documentReference.id}")
-        }
-        .addOnFailureListener { e ->
-            Log.w("PostScreen", "Error adding comment", e)
-        }
+    val user = FirebaseAuth.getInstance().currentUser
+
+    if (user != null) {
+        val userDoc = db.collection("users").document(user.uid)
+
+        // 댓글을 posts/{postId}/comments 하위 컬렉션에 추가
+        db.collection("posts").document(postId).collection("comments")
+            .add(comment)
+            .addOnSuccessListener { documentReference ->
+                Log.d("PostScreen", "Comment added with ID: ${documentReference.id}")
+
+                // 댓글 수를 증가시킵니다.
+                userDoc.update("commentCount", FieldValue.increment(1))
+                    .addOnSuccessListener {
+                        Log.d("PostScreen", "User comment count updated")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w("PostScreen", "Error updating user comment count", e)
+                    }
+            }
+            .addOnFailureListener { e ->
+                Log.w("PostScreen", "Error adding comment", e)
+            }
+    } else {
+        Log.w("PostScreen", "User is not logged in")
+    }
 }

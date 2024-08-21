@@ -14,6 +14,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,11 +30,55 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.vacation_project.R
-
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
+//
 @Composable
-fun RankScreen() {
-
+fun RankScreen(navController: NavController, user: FirebaseUser?) {
     val mainColor = colorResource(id = R.color.main_color)
+    var commentCount by remember { mutableStateOf(0) }
+    var rank by remember { mutableStateOf("1단계") }
+    var description by remember { mutableStateOf("심기 전 씨앗") }
+    val db = FirebaseFirestore.getInstance()
+
+    // 사용자 댓글 수에 따른 등급 설정
+    LaunchedEffect(user) {
+        user?.let {
+            db.collection("users").document(it.uid).get().addOnSuccessListener { document ->
+                if (document.exists()) {
+                    commentCount = document.getLong("commentCount")?.toInt() ?: 0
+
+                    // 댓글 수에 따라 단계 설정
+                    when {
+                        commentCount >= 100 -> {
+                            rank = "4단계"
+                            description = "다 자란 나무"
+                        }
+                        commentCount >= 50 -> {
+                            rank = "3단계"
+                            description = "거의 자란 새싹"
+                        }
+                        commentCount >= 20 -> {
+                            rank = "2단계"
+                            description = "조금 자란 새싹"
+                        }
+                        else -> {
+                            rank = "1단계"
+                            description = "심기 전 씨앗"
+                        }
+                    }
+                } else {
+                    rank = "1단계"
+                    description = "심기 전 씨앗"
+                }
+            }.addOnFailureListener {
+                // 실패 시 기본값 설정
+                rank = "1단계"
+                description = "심기 전 씨앗"
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -50,7 +99,13 @@ fun RankScreen() {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        Rank(rank = "1", description = "rank", imageResId = R.drawable.rank1)
+        // 댓글 수에 따른 Rank 표시
+        Rank(rank = rank, description = description, imageResId = when(rank) {
+            "4단계" -> R.drawable.rank4
+            "3단계" -> R.drawable.rank3
+            "2단계" -> R.drawable.rank2
+            else -> R.drawable.rank1
+        })
 
         Spacer(modifier = Modifier.height(20.dp))
 
