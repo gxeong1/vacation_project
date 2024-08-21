@@ -23,10 +23,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.vacation_project.R
 
 @Composable
-fun RankScreen() {
+fun RankScreen(navController: NavController) {
 
     val mainColor = colorResource(id = R.color.main_color)
     Column(

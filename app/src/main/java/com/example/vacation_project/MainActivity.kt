@@ -139,7 +139,7 @@ fun BottomNav(navController: NavHostController) {
 }
 
 @Composable
-fun NavigationGraph(navController: NavHostController, modifier: Modifier = Modifier) {
+fun NavigationGraph(navController: NavHostController) {
     NavHost(navController = navController, startDestination = BottomNavItem.Community.screenRoute, Modifier.fillMaxSize()) {
         composable(BottomNavItem.Community.screenRoute) {
             CommunityScreen(navController)
@@ -148,7 +148,7 @@ fun NavigationGraph(navController: NavHostController, modifier: Modifier = Modif
             SearchScreen(navController = navController)
         }
         composable(BottomNavItem.Rank.screenRoute) {
-            RankScreen()
+            RankScreen(navController)
         }
         composable(BottomNavItem.Profile.screenRoute) {
             ProfileScreen(navController, user = null)

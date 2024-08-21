@@ -166,7 +166,10 @@ fun ProfileScreen(navController: NavController, user: FirebaseUser?) {
             ImageButton(
                 imageResId = R.drawable.back,
                 contentDescription = "back",
-                onClick = { /* 수정 예정 */ },
+                onClick = { navController.navigate(Routes.RankScreen) {
+                    popUpTo(Routes.ProfileScreen) { inclusive = true }
+                    launchSingleTop = true
+                } },
                 size = 12,
                 modifier = Modifier
                     .width(7.dp)
