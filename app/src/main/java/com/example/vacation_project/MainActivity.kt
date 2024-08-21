@@ -148,7 +148,7 @@ fun NavigationGraph(navController: NavHostController) {
             SearchScreen(navController = navController)
         }
         composable(BottomNavItem.Rank.screenRoute) {
-            RankScreen(navController)
+            RankScreen()
         }
         composable(BottomNavItem.Profile.screenRoute) {
             ProfileScreen(navController, user = null)

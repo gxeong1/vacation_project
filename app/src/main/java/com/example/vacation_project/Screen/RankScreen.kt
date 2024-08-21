@@ -27,7 +27,7 @@ import androidx.navigation.NavController
 import com.example.vacation_project.R
 
 @Composable
-fun RankScreen(navController: NavController) {
+fun RankScreen() {
 
     val mainColor = colorResource(id = R.color.main_color)
     Column(
