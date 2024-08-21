@@ -138,14 +138,7 @@ fun ProfileScreen(navController: NavController, user: FirebaseUser?) {
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        Card(modifier = Modifier
-            .width(345.dp)
-            .height(80.dp)
-            .padding(start = 30.dp),
-            shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.cardColors(Color(0xFF8AB0B9))) {
-
-        }
+        RankCard(rank = "1단계", description = "심기 전 씨앗", imageResId = R.drawable.rank1)
 
         Spacer(modifier = Modifier.height(30.dp))
 
@@ -197,6 +190,52 @@ fun ProfileScreen(navController: NavController, user: FirebaseUser?) {
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Text(text = "로그아웃", color = Color.Black)
+            }
+        }
+    }
+}
+
+
+@Composable
+fun RankCard(rank: String, description: String, imageResId: Int) {
+    Card(
+        modifier = Modifier
+            .width(345.dp)
+            .height(80.dp)
+            .padding(start = 30.dp),
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(Color(0xFF8AB0B9))
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(top = 10.dp, start = 10.dp)
+        ) {
+            Card (modifier = Modifier.size(60.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(Color(0xFFDCEAEB))
+                ){
+                Image(
+                    painter = painterResource(id = imageResId),
+                    contentDescription = null,
+                    modifier = Modifier.size(55.dp)
+                        .padding(top = 7.dp, start = 5.dp)
+                )
+            }
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Column {
+                Text(
+                    text = rank,
+                    fontSize = 13.sp,
+                    color = Color.Black
+                )
+                Text(
+                    text = description,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
             }
         }
     }

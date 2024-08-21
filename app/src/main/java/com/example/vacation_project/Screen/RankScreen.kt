@@ -50,19 +50,12 @@ fun RankScreen() {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        Rank(rank = "1")
+        Rank(rank = "1", description = "rank", imageResId = R.drawable.rank1)
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        Image(painter = painterResource(id = R.drawable.rank1),
-            contentDescription = "rank1",
-            modifier = Modifier
-                .width(150.dp)
-                .height(130.dp))
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        Box(modifier = Modifier.fillMaxSize()
+        Box(modifier = Modifier
+            .fillMaxSize()
             .background(color = mainColor)) {
             Image(
                 painter = painterResource(id = R.drawable.ranklevel),
@@ -75,15 +68,24 @@ fun RankScreen() {
 }
 
 @Composable
-fun Rank(rank: String) {
-    Box(
+fun Rank(rank: String, description: String, imageResId: Int) {
+    Column(
         modifier = Modifier.fillMaxWidth(),
-        contentAlignment = Alignment.Center
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = "$rank 단계",
             fontSize = 16.sp,
             fontWeight = FontWeight.W600
         )
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Image(painter = painterResource(id = imageResId),
+            contentDescription = description,
+            modifier = Modifier
+                .width(150.dp)
+                .height(130.dp))
+
     }
 }
