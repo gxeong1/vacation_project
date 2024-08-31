@@ -97,18 +97,18 @@ fun ReviewScreen(
             placeholder = { Text("리뷰를 입력해주세요.") },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(400.dp)
+                .height(300.dp)
                 .background(Color.White)  // Apply background color directly here
                 .padding(8.dp),           // Optionally add padding if needed
             maxLines = 5
         )
 
 
-        Spacer(modifier = Modifier.height(150.dp))
+        Spacer(modifier = Modifier.height(100.dp))
 
         // Submit button
         Row {
-            Spacer(Modifier.width(49.dp))
+            Spacer(Modifier.width(20.dp))
             Button(
                 onClick = { navController.navigate(Routes.SearchScreen) },
                 modifier = Modifier
@@ -116,7 +116,8 @@ fun ReviewScreen(
                     .height(50.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(181, 210, 216, 255)
+                    containerColor = Color(181, 210, 216, 255),
+
                 )
             ) {
                 Text("완료")

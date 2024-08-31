@@ -66,7 +66,7 @@ fun BookDetailScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(20.dp))
         // Display the book image
         Row {
             Spacer(modifier = Modifier.width(10.dp))
@@ -74,24 +74,24 @@ fun BookDetailScreen(
                 painter = painterResource(id = bookImage),
                 contentDescription = "Book Image",
                 modifier = Modifier
-                    .size(400.dp)
+                    .size(300.dp)
                     .padding(16.dp)
             )
         }
 
         // Display the book details
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(10.dp))
         Text(text = bookName, fontSize = 20.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(8.dp))
         Text(text = "$bookAuthor(지은이), $bookPublishingHouse", fontSize = 16.sp, modifier = Modifier.padding(8.dp))
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(10.dp))
         Text(text = "판매가        $bookPrice 원", fontSize = 16.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(8.dp))
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(10.dp))
         Text(text = "책 소개", fontSize = 18.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(8.dp))
         Text(text = "$bookDescription", fontSize = 15.sp, modifier = Modifier.padding(8.dp))
-        Spacer(modifier = Modifier.height(29.dp))
+        Spacer(modifier = Modifier.height(10.dp))
         Row {
-            Spacer(modifier = Modifier.width(37.dp))
+            Spacer(modifier = Modifier.width(10.dp))
             ReviewButton(navController)
         }
     }

@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.*
@@ -42,22 +44,27 @@ var descrip:List<String> = listOf<String>("'조정식' 수능 영어강사가 �
 
 @Composable
 fun SearchResult(navController: NavHostController) {
-    Search_menu(navController)
     Column {
-        Spacer(modifier = Modifier.height(50.dp))
-        book_name.forEachIndexed { index, book ->
-            BookItem(
-                name = book,
-                subject = subject[index],
-                author = author[index],
-                publishingHouse = publishing_house[index],
-                price = price[index],
-                description = descrip[index],
-                imageResource = bookImages[index], // Pass the image resource directly
-                navController = navController, // Pass the navController
-                index = index // Pass the index of the book
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+        Search_menu(navController)
+        Spacer(modifier = Modifier.height(20.dp))
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(horizontal = 10.dp, vertical = 8.dp)
+        ) {
+            itemsIndexed(book_name) { index, book ->
+                BookItem(
+                    name = book,
+                    subject = subject[index],
+                    author = author[index],
+                    publishingHouse = publishing_house[index],
+                    price = price[index],
+                    description = descrip[index],
+                    imageResource = bookImages[index], // Pass the image resource directly
+                    navController = navController, // Pass the navController
+                    index = index // Pass the index of the book
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
         }
     }
 }
@@ -76,7 +83,7 @@ fun BookItem(name: String,
     Row(modifier = Modifier
         .fillMaxWidth()
         .clickable {
-            bookIndex=index
+            bookIndex = index
             navController.navigate(Routes.BookDetailScreen)
         }
     ) {

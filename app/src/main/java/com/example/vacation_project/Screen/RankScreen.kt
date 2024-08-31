@@ -129,7 +129,7 @@ fun Rank(rank: String, description: String, imageResId: Int) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "$rank 단계",
+            text = "$rank",
             fontSize = 16.sp,
             fontWeight = FontWeight.W600
         )
